@@ -8,6 +8,7 @@ def format_rust(unformatted: str, _info_str: str) -> str:
     result = subprocess.run(
         ["rustfmt"],
         stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
         input=unformatted_bytes,
     )
     if result.returncode:
