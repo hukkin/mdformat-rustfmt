@@ -139,11 +139,11 @@ testing = ["coverage", "pytest (>=3.6,<4)", "pytest-cov", "pytest-regressions", 
 
 [[package]]
 name = "mdformat"
-version = "0.5.4"
+version = "0.5.5"
 description = "CommonMark compliant Markdown formatter"
 category = "main"
 optional = false
-python-versions = ">=3.6,<4.0"
+python-versions = ">=3.6.1,<4.0.0"
 
 [package.dependencies]
 importlib-metadata = {version = ">=0.12", markers = "python_version < \"3.8\""}
@@ -388,8 +388,8 @@ markdown-it-py = [
     {file = "markdown_it_py-0.6.1-py3-none-any.whl", hash = "sha256:f22808fed0fd5c006c5c1626ea4e6c68123d5af54eb54712af77a4c57ad34ebc"},
 ]
 mdformat = [
-    {file = "mdformat-0.5.4-py3-none-any.whl", hash = "sha256:c791fd86571f85471489440f532ad8e7ca0396bd588d6a7a3b3e0e879cefcc5e"},
-    {file = "mdformat-0.5.4.tar.gz", hash = "sha256:a8e69498d963ce56a81d1c063a50cc72e33436ad02a378a018c5f0f07789a0bd"},
+    {file = "mdformat-0.5.5-py3-none-any.whl", hash = "sha256:d6c1f8a7cc3608d075ab5e48bfa25e9977f5ad024f4f87e076ff86012c729d0f"},
+    {file = "mdformat-0.5.5.tar.gz", hash = "sha256:f727bd6733adc46411ee213f1ec1293a879377adcb52603254b4b630176c3197"},
 ]
 mdit-py-plugins = [
     {file = "mdit-py-plugins-0.2.4.tar.gz", hash = "sha256:e7db0de4a3466941faa433f77a98d09a09a0b877e79eace79506fd0d083e490f"},
