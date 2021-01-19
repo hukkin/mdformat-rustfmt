@@ -1,10 +1,8 @@
 from pathlib import Path
 
-import pytest
 from markdown_it.utils import read_fixture_file
-
 import mdformat
-
+import pytest
 
 TEST_CASES = read_fixture_file(Path(__file__).parent / "data" / "fixtures.md")
 
