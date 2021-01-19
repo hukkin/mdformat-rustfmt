@@ -1,5 +1,6 @@
 __version__ = "0.0.2"  # DO NOT EDIT THIS LINE MANUALLY. LET bump2version UTILITY DO IT
 
+import re
 import subprocess
 from typing import Callable
 
@@ -37,13 +38,8 @@ def _hide_sharp(line: str) -> str:
 
 
 def _unhide_sharp(line: str) -> str:
-    lstripped = line.lstrip()
-    if lstripped.startswith(_RUSTFMT_CUSTOM_COMMENT_PREFIX):
-        return _removeprefix(lstripped, _RUSTFMT_CUSTOM_COMMENT_PREFIX)
+    if re.match(r"\s*" + re.escape(_RUSTFMT_CUSTOM_COMMENT_PREFIX), line):
+        # Remove the first "rustfmt custom comment prefix" and any leading
+        # whitespace the prefixed line originally had.
+        return re.sub(re.escape(_RUSTFMT_CUSTOM_COMMENT_PREFIX) + r"\s*", "", line, 1)
     return line
-
-
-def _removeprefix(string: str, prefix: str) -> str:
-    if string.startswith(prefix):
-        return string[len(prefix) :]
-    return string

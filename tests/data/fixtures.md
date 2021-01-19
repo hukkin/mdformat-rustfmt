@@ -16,8 +16,8 @@ Ignore setup code
 .
 ~~~rust
 fn main() {
-    # let x=a();b();c();
-    let y=d();e();f();
+  # let x=a();b();c();
+  let y=d();e();f();
 }
 ~~~
 .
