@@ -34,7 +34,7 @@ def format_rust(unformatted: str, _info_str: str) -> str:
         raise Exception("Failed to format Rust code\n" + formatted)
 
     in_commented = False
-    return _for_each_line(formatted, _unhide_sharp) + "\n"
+    return _for_each_line(formatted, _unhide_sharp).replace("\r", "") + "\n"
 
 
 def _for_each_line(string: str, action: Callable[[str], str]) -> str:
