@@ -59,6 +59,8 @@ fn main() {
     # // comment
 let s = "asdf
 ## literal hash";
+let x = 5;
+let y = 6;
 }
 ~~~
 .
@@ -67,6 +69,8 @@ fn main() {
 #   // comment
     let s = "asdf
 ## literal hash";
+    let x = 5;
+    let y = 6;
 }
 ```
 .
@@ -104,11 +108,23 @@ struct MyStruct {}
 # fn main() {}
 #
 #
+trait SomeTrait {   fn nothing() {} }
+ struct Another;
+
+ impl  Another {}
 ~~~
 .
 ```rust
 # struct Something {}
 # 
 # fn main() {}
+# 
+trait SomeTrait {
+    fn nothing() {}
+}
+
+struct Another;
+
+impl Another {}
 ```
 .

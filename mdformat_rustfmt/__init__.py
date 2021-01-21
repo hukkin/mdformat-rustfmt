@@ -34,7 +34,9 @@ def format_rust(unformatted: str, _info_str: str) -> str:
         raise Exception("Failed to format Rust code\n" + formatted)
 
     in_commented = False
-    return _for_each_line(formatted, _unhide_sharp).replace("\r", "") + "\n"
+    remove_newlines = False
+
+    return _for_each_line(formatted, _unhide_sharp).replace("\r", "")
 
 
 def _for_each_line(string: str, action: Callable[[str], str]) -> str:
@@ -44,7 +46,7 @@ def _for_each_line(string: str, action: Callable[[str], str]) -> str:
 
     lines = list(flatten(lines))
 
-    lines = list(filter(None, lines))
+    lines = [x for x in lines if x != None]
     return "\n".join(lines)
 
 
@@ -58,7 +60,7 @@ def _hide_sharp(line: str):
     global in_commented
     stripped = line.strip()
 
-    if stripped.startswith("#"):
+    if stripped.startswith("# ") or stripped.startswith("##") or stripped == "#":
         tokens = []
 
         if not in_commented:
@@ -83,13 +85,16 @@ def _hide_sharp(line: str):
 
 
 next_line_escape = False
+remove_newlines = False
 
 
 def _unhide_sharp(line: str):
     global in_commented
     global next_line_escape
+    global remove_newlines
 
     if _RUSTFMT_CUSTOM_COMMENT_BLOCK_BEGIN in line:
+        remove_newlines = True
         in_commented = True
         return None
 
@@ -105,9 +110,15 @@ def _unhide_sharp(line: str):
         return "#"
 
     if in_commented:
+        if line == "" and remove_newlines:
+            return None
+
+        remove_newlines = False
+
         if line.startswith("#") and next_line_escape:
             next_line_escape = False
             return "#" + line
+
         if line.startswith(" "):
             return "#" + line[1:]
 
