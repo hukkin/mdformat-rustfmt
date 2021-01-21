@@ -1,19 +1,20 @@
 __version__ = "0.0.3"  # DO NOT EDIT THIS LINE MANUALLY. LET bump2version UTILITY DO IT
 
-import re
 import subprocess
 from typing import Callable
+from collections.abc import Iterable
+
 
 in_commented = False
 
-from collections.abc import Iterable
 
-def flatten(l):
-    for el in l:
+def flatten(deep_list):
+    for el in deep_list:
         if isinstance(el, Iterable) and not isinstance(el, (str, bytes)):
             yield from flatten(el)
         else:
             yield el
+
 
 def format_rust(unformatted: str, _info_str: str) -> str:
     global in_commented
@@ -63,7 +64,7 @@ def _hide_sharp(line: str):
             return [_RUSTFMT_CUSTOM_COMMENT_BLOCK_BEGIN, stripped[1:]]
 
         return stripped[1:]
-            
+
     if in_commented:
         in_commented = False
         return [_RUSTFMT_CUSTOM_COMMENT_BLOCK_END, stripped]
