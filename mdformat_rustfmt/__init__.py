@@ -17,6 +17,7 @@ def flatten(deep_list):
 
 def format_rust(unformatted: str, _info_str: str) -> str:
     global in_commented
+    global remove_newlines
 
     unformatted = _for_each_line(unformatted, _hide_sharp)
 
@@ -46,7 +47,7 @@ def _for_each_line(string: str, action: Callable[[str], str]) -> str:
 
     lines = list(flatten(lines))
 
-    lines = [x for x in lines if x != None]
+    lines = [x for x in lines if x is not None]
     return "\n".join(lines)
 
 
