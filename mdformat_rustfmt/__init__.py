@@ -1,9 +1,8 @@
 __version__ = "0.0.3"  # DO NOT EDIT THIS LINE MANUALLY. LET bump2version UTILITY DO IT
 
+from collections.abc import Iterable
 import subprocess
 from typing import Callable
-from collections.abc import Iterable
-
 
 in_commented = False
 
@@ -49,21 +48,31 @@ def _for_each_line(string: str, action: Callable[[str], str]) -> str:
     return "\n".join(lines)
 
 
-_RUSTFMT_CUSTOM_COMMENT_PREFIX = "//__MDFORMAT_RUSTFMT__"
 _RUSTFMT_CUSTOM_COMMENT_BLOCK_BEGIN = "//__MDFORMAT_RUSTFMT_COMMENT_BEGIN__"
 _RUSTFMT_CUSTOM_COMMENT_BLOCK_END = "//__MDFORMAT_RUSTFMT_COMMENT_END__"
+_RUSTFMT_CUSTOM_COMMENT_ESCAPE = "//__MDFORMAT_RUSTFMT_COMMENT_ESCAPE__"
 
 
 def _hide_sharp(line: str):
     global in_commented
     stripped = line.strip()
 
-    if stripped.startswith("#") and not line.startswith("##"):
+    if stripped.startswith("#"):
         if not in_commented:
             in_commented = True
-            return [_RUSTFMT_CUSTOM_COMMENT_BLOCK_BEGIN, stripped[1:]]
 
-        return stripped[1:]
+            if stripped.startswith("##"):
+                return [
+                    _RUSTFMT_CUSTOM_COMMENT_BLOCK_BEGIN,
+                    _RUSTFMT_CUSTOM_COMMENT_ESCAPE,
+                    stripped[1:],
+                ]
+            else:
+                return [_RUSTFMT_CUSTOM_COMMENT_BLOCK_BEGIN, stripped[1:]]
+        if stripped.startswith("##"):
+            return [_RUSTFMT_CUSTOM_COMMENT_ESCAPE, stripped[1:]]
+        else:
+            return stripped[1:]
 
     if in_commented:
         in_commented = False
@@ -72,8 +81,12 @@ def _hide_sharp(line: str):
     return stripped
 
 
+next_line_escape = False
+
+
 def _unhide_sharp(line: str):
     global in_commented
+    global next_line_escape
 
     if _RUSTFMT_CUSTOM_COMMENT_BLOCK_BEGIN in line:
         in_commented = True
@@ -83,8 +96,13 @@ def _unhide_sharp(line: str):
         in_commented = False
         return None
 
+    if _RUSTFMT_CUSTOM_COMMENT_ESCAPE in line:
+        next_line_escape = True
+        return None
+
     if in_commented:
-        if line.startswith("#"):
+        if line.startswith("#") and next_line_escape:
+            next_line_escape = False
             return "#" + line
         if line.startswith(" "):
             return "#" + line[1:]

@@ -70,3 +70,28 @@ fn main() {
 }
 ```
 .
+
+Handle hidden derive and attr statements
+.
+~~~rust
+#   #[derive(Debug)]
+struct MyStruct {}
+~~~
+.
+```rust
+# #[derive(Debug)]
+struct MyStruct {}
+```
+.
+Handle derive and attr statements
+.
+~~~rust
+#[derive(Debug)]
+struct MyStruct {}
+~~~
+.
+```rust
+#[derive(Debug)]
+struct MyStruct {}
+```
+.
