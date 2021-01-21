@@ -51,6 +51,7 @@ def _for_each_line(string: str, action: Callable[[str], str]) -> str:
 _RUSTFMT_CUSTOM_COMMENT_BLOCK_BEGIN = "//__MDFORMAT_RUSTFMT_COMMENT_BEGIN__"
 _RUSTFMT_CUSTOM_COMMENT_BLOCK_END = "//__MDFORMAT_RUSTFMT_COMMENT_END__"
 _RUSTFMT_CUSTOM_COMMENT_ESCAPE = "//__MDFORMAT_RUSTFMT_COMMENT_ESCAPE__"
+_RUSTFMT_CUSTOM_COMMENT_BLANK_LINE = "//__MDFORMAT_RUSTFMT_COMMENT_BLANK_LINE__"
 
 
 def _hide_sharp(line: str):
@@ -58,21 +59,21 @@ def _hide_sharp(line: str):
     stripped = line.strip()
 
     if stripped.startswith("#"):
+        tokens = []
+
         if not in_commented:
             in_commented = True
+            tokens.append(_RUSTFMT_CUSTOM_COMMENT_BLOCK_BEGIN)
 
-            if stripped.startswith("##"):
-                return [
-                    _RUSTFMT_CUSTOM_COMMENT_BLOCK_BEGIN,
-                    _RUSTFMT_CUSTOM_COMMENT_ESCAPE,
-                    stripped[1:],
-                ]
-            else:
-                return [_RUSTFMT_CUSTOM_COMMENT_BLOCK_BEGIN, stripped[1:]]
         if stripped.startswith("##"):
-            return [_RUSTFMT_CUSTOM_COMMENT_ESCAPE, stripped[1:]]
-        else:
-            return stripped[1:]
+            tokens.append(_RUSTFMT_CUSTOM_COMMENT_ESCAPE)
+
+        # if stripped == "#":
+        #     tokens.append(_RUSTFMT_CUSTOM_COMMENT_BLANK_LINE)
+
+        tokens.append(stripped[1:])
+
+        return tokens
 
     if in_commented:
         in_commented = False
@@ -99,6 +100,9 @@ def _unhide_sharp(line: str):
     if _RUSTFMT_CUSTOM_COMMENT_ESCAPE in line:
         next_line_escape = True
         return None
+
+    if _RUSTFMT_CUSTOM_COMMENT_BLANK_LINE in line:
+        return "#"
 
     if in_commented:
         if line.startswith("#") and next_line_escape:

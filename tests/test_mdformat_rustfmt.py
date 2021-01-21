@@ -12,6 +12,8 @@ TEST_CASES = read_fixture_file(Path(__file__).parent / "data" / "fixtures.md")
 )
 def test_fixtures(line, title, text, expected):
     """Test fixtures in tests/data/fixtures.md."""
+    if "NIGHTLY" in title:
+        pytest.skip("nightly test not supported on stable")
     md_new = mdformat.text(text, codeformatters={"rust"})
     if md_new != expected:
         print("Formatted (unexpected) Markdown below:")

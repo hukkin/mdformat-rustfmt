@@ -95,3 +95,20 @@ struct MyStruct {}
 struct MyStruct {}
 ```
 .
+[NIGHTLY] Preserve blank lines
+.
+~~~rust
+# struct Something {}
+#
+#
+# fn main() {}
+#
+#
+~~~
+.
+```rust
+# struct Something {}
+# 
+# fn main() {}
+```
+.
