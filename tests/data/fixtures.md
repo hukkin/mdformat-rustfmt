@@ -128,7 +128,7 @@ struct Another;
 impl Another {}
 ```
 .
-Not sure
+Comment collapse does not delete lines
 .
 ~~~rust
 # fn main() -> Result<(), amethyst::Error> {
