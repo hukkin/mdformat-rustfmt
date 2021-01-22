@@ -128,3 +128,26 @@ struct Another;
 impl Another {}
 ```
 .
+Not sure
+.
+~~~rust
+# fn main() -> Result<(), amethyst::Error> {
+#   let game_data = DispatcherBuilder::default().with_bundle(
+        // inside your rendering bundle setup
+        RenderingBundle::<DefaultBackend>::new()
+            .with_plugin(RenderFlat2D::default())
+#   )?;
+#   Ok(())
+# }
+~~~
+.
+```rust
+# fn main() -> Result<(), amethyst::Error> {
+#   let game_data = DispatcherBuilder::default().with_bundle(
+        // inside your rendering bundle setup
+        RenderingBundle::<DefaultBackend>::new().with_plugin(RenderFlat2D::default()),
+#   )?;
+#   Ok(())
+# }
+```
+.

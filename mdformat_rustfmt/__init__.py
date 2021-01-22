@@ -1,6 +1,7 @@
 __version__ = "0.0.3"  # DO NOT EDIT THIS LINE MANUALLY. LET bump2version UTILITY DO IT
 
 from collections.abc import Iterable
+import re
 import subprocess
 from typing import Callable
 
@@ -97,15 +98,22 @@ def _unhide_sharp(line: str):
     if _RUSTFMT_CUSTOM_COMMENT_BLOCK_BEGIN in line:
         remove_newlines = True
         in_commented = True
-        return None
+        line = re.sub(
+            re.escape(_RUSTFMT_CUSTOM_COMMENT_BLOCK_BEGIN), "", line, 1
+        ).rstrip()
+        return line or None
 
     if _RUSTFMT_CUSTOM_COMMENT_BLOCK_END in line:
         in_commented = False
-        return None
+        line = re.sub(
+            re.escape(_RUSTFMT_CUSTOM_COMMENT_BLOCK_END), "", line, 1
+        ).rstrip()
+        return line or None
 
     if _RUSTFMT_CUSTOM_COMMENT_ESCAPE in line:
         next_line_escape = True
-        return None
+        line = re.sub(re.escape(_RUSTFMT_CUSTOM_COMMENT_ESCAPE), "", line, 1).rstrip()
+        return line or None
 
     if _RUSTFMT_CUSTOM_COMMENT_BLANK_LINE in line:
         return "#"
